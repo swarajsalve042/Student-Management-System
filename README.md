@@ -1,30 +1,42 @@
 # Student Management System
 
-[![ci](https://github.com/swarajsalve042/Student-Management-System/actions/workflows/ci.yml/badge.svg)](https://github.com/swarajsalve042/Student-Management-System/actions/workflows/ci.yml)
-
 [![CI](https://github.com/swarajsalve042/Student-Management-System/actions/workflows/ci.yml/badge.svg)](https://github.com/swarajsalve042/Student-Management-System/actions/workflows/ci.yml)
 
-Java 17 JDBC data-access project for student records.
+A Java 17 JDBC data-access project for managing student records with parameterized SQL and an H2 in-memory database.
 
 ## Features
-- Initializes a students table.
-- Adds students with prepared statements and generated IDs.
-- Lists student records.
-- Deletes students by ID.
-- Uses try-with-resources for JDBC resource management.
-- JUnit 5 tests with an H2 in-memory database.
+
+- Initialize the student table safely more than once.
+- Add students and retrieve generated database IDs.
+- List students in ID order and retrieve an individual student.
+- Update student details and delete records by ID.
+- Validate required fields, email format, field lengths and positive IDs.
+- Trim names/courses and normalize email addresses to lowercase.
+- Use PreparedStatement for inserts, lookups, updates and deletes.
+- Close JDBC connections, statements and result sets with try-with-resources.
 
 ## Requirements
-Java 17 and Maven 3.9+.
 
-## Test
-`mvn test`
+- Java 17
+- Maven 3.9+
 
-## Scope
-This repository demonstrates the JDBC persistence layer only. It does not include a web/desktop UI, authentication, or production database deployment.
+## Run tests
 
-## Latest automated verification (25 November 2026)
+```bash
+mvn --batch-mode test
+```
 
-- [Maven/JDBC tests — successful GitHub Actions run](https://github.com/swarajsalve042/Student-Management-System/actions/runs/45575564686)
+The JUnit 5 test suite uses H2 and covers create, list, lookup, update, delete, duplicate email handling, invalid input, missing IDs, repeated schema initialization and SQL-injection-style input treated as data.
 
-These links document automated checks only; they do not imply production deployment or manual end-user acceptance testing.
+## Repository API
+
+- initialize() — create the students table if it does not exist.
+- add(name, email, course) — validate and insert a student; return generated ID.
+- findAll() — list student rows in ID order.
+- findById(id) — return an optional student row.
+- update(id, name, email, course) — update a record and report whether it existed.
+- delete(id) — delete a record and report whether it existed.
+
+## Scope and limitations
+
+This repository currently demonstrates a JDBC persistence layer, not a complete student management application. It does not include a web/desktop interface, REST API, authentication, authorization, pagination or production database deployment. The H2 database used by tests is in-memory.
